@@ -2,7 +2,10 @@
 
 require_relative '../credit_card'
 require_relative '../substitution_cipher'
+require_relative '../double_trans_cipher'
 require 'minitest/autorun'
+
+action = %w[encrypt decrypt]
 
 describe 'Test card info encryption' do
   before do
@@ -41,4 +44,19 @@ describe 'Test card info encryption' do
 
   # TODO: Add tests for double transposition and modern symmetric key ciphers
   #       Can you DRY out the tests using metaprogramming? (see lecture slide)
+  describe 'Using Double Transposition cipher' do
+    action.each do |a|
+      it "should #{a} card information" do
+        enc = DoubleTranspositionCipher.encrypt(@cc, @key)
+        case a
+        when 'encrypt'
+          _(enc).wont_equal @cc.to_s
+          _(enc).wont_be_nil
+        when 'decrypt'
+          dec = DoubleTranspositionCipher.decrypt(enc, @key)
+          _(dec).must_equal @cc.to_s
+        end
+      end
+    end
+  end
 end
