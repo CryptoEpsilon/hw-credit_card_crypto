@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative '../sk_cipher'
 require_relative '../credit_card'
 require_relative '../substitution_cipher'
 require_relative '../double_trans_cipher'
@@ -58,5 +59,22 @@ describe 'Test card info encryption' do
         end
       end
     end
+
+  describe "Using skcipher" do
+    action.each do |a|
+      it "should #{a} card information" do
+        enc = ModernSymmetricCipher.encrypt(@cc, @key)
+        case a
+        when 'encrypt'
+          _(enc).wont_equal @cc.to_s
+          _(enc).wont_be_nil
+        when 'decrypt'
+        dec = ModernSymmetricCipher.decrypt(enc, @key)
+        _(dec).must_equal @cc.to_s
+        end
+      end
+    end
+
+  end
   end
 end
