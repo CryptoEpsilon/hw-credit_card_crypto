@@ -13,6 +13,7 @@ describe 'Test card info encryption' do
     @cc = CreditCard.new('4916603231464963', 'Mar-30-2020',
                          'Soumya Ray', 'Visa')
     @key = 3
+    @sym_key = ModernSymmetricCipher.generate_new_key
   end
 
   describe 'Using Caesar cipher' do
@@ -63,13 +64,13 @@ describe 'Test card info encryption' do
   describe "Using skcipher" do
     action.each do |a|
       it "should #{a} card information" do
-        enc = ModernSymmetricCipher.encrypt(@cc, @key)
+        enc = ModernSymmetricCipher.encrypt(@cc, @sym_key)
         case a
         when 'encrypt'
           _(enc).wont_equal @cc.to_s
           _(enc).wont_be_nil
         when 'decrypt'
-        dec = ModernSymmetricCipher.decrypt(enc, @key)
+        dec = ModernSymmetricCipher.decrypt(enc, @sym_key)
         _(dec).must_equal @cc.to_s
         end
       end
