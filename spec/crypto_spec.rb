@@ -60,8 +60,9 @@ describe 'Test card info encryption' do
         end
       end
     end
+  end
 
-  describe "Using skcipher" do
+  describe 'Using skcipher' do
     action.each do |a|
       it "should #{a} card information" do
         enc = ModernSymmetricCipher.encrypt(@cc, @sym_key)
@@ -70,12 +71,10 @@ describe 'Test card info encryption' do
           _(enc).wont_equal @cc.to_s
           _(enc).wont_be_nil
         when 'decrypt'
-        dec = ModernSymmetricCipher.decrypt(enc, @sym_key)
-        _(dec).must_equal @cc.to_s
+          dec = ModernSymmetricCipher.decrypt(enc, @sym_key)
+          _(dec).must_equal @cc.to_s
         end
       end
     end
-
-  end
   end
 end
